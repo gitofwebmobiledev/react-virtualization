@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { loremIpsum } from 'lorem-ipsum';
+import { List } from "react-virtualized";
 
 const rowCount = 1000;
+const listHeight = 450;
+const rowHeight = 50;
+const rowWidth = 800;
 
 class App extends Component {
   constructor() {
     super();
+    this.renderRow = this.renderRow.bind(this);
     this.list = Array(rowCount).fill().map((val, idx) => {
       return {
         id: idx, 
@@ -23,15 +28,29 @@ class App extends Component {
     });
   }
 
-  renderRow(item) {
+  // renderRow(item) {
+  //   return (
+  //     <div key={item.id} className="row">
+  //       <div className="image">
+  //         <img src={item.image} alt="" />
+  //       </div>
+  //       <div className="content">
+  //         <div>{item.name}</div>
+  //         <div>{item.text}</div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  renderRow({ index, key, style }) {
     return (
-      <div key={item.id} className="row">
+      <div key={key} style={style} className="row">
         <div className="image">
-          <img src={item.image} alt="" />
+          <img src={this.list[index].image} alt="" />
         </div>
         <div className="content">
-          <div>{item.name}</div>
-          <div>{item.text}</div>
+          <div>{this.list[index].name}</div>
+          <div>{this.list[index].text}</div>
         </div>
       </div>
     );
@@ -45,7 +64,15 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div className="list">
-          {this.list.map(this.renderRow)}
+          {/* {this.list.map(this.renderRow)} */}
+          <List
+            width={rowWidth}
+            height={listHeight}
+            rowHeight={rowHeight}
+            rowRenderer={this.renderRow}
+            rowCount={this.list.length}
+            overscanRowCount={3}
+          />
         </div>
       </div>
     );
