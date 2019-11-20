@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { loremIpsum } from 'lorem-ipsum';
-import { List } from "react-virtualized";
+import { List, AutoSizer } from "react-virtualized";
 
 const rowCount = 1000;
-const listHeight = 450;
+// const listHeight = 450;
 const rowHeight = 50;
-const rowWidth = 800;
+// const rowWidth = 800;
 
 class App extends Component {
   constructor() {
@@ -27,20 +27,6 @@ class App extends Component {
       }
     });
   }
-
-  // renderRow(item) {
-  //   return (
-  //     <div key={item.id} className="row">
-  //       <div className="image">
-  //         <img src={item.image} alt="" />
-  //       </div>
-  //       <div className="content">
-  //         <div>{item.name}</div>
-  //         <div>{item.text}</div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   renderRow({ index, key, style }) {
     return (
@@ -64,15 +50,22 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div className="list">
-          {/* {this.list.map(this.renderRow)} */}
-          <List
-            width={rowWidth}
-            height={listHeight}
-            rowHeight={rowHeight}
-            rowRenderer={this.renderRow}
-            rowCount={this.list.length}
-            overscanRowCount={3}
-          />
+          <AutoSizer>
+          {
+            ({ width, height }) => {
+              return (
+                <List
+                  width={width}
+                  height={height}
+                  rowHeight={rowHeight}
+                  rowRenderer={this.renderRow}
+                  rowCount={this.list.length}
+                  overscanRowCount={3}
+                />
+              )
+            }
+          }
+          </AutoSizer>
         </div>
       </div>
     );
