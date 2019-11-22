@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { loremIpsum } from 'lorem-ipsum';
-import { List, AutoSizer } from "react-virtualized";
+import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from "react-virtualized";
 
 const rowCount = 1000;
 // const listHeight = 450;
-const rowHeight = 50;
+// const rowHeight = 50;
 // const rowWidth = 800;
 
 class App extends Component {
@@ -26,19 +26,39 @@ class App extends Component {
         })
       }
     });
+    this.cache = new CellMeasurerCache({
+      fixedWidth: true,
+      defaultHeight: 100
+    });
   }
 
-  renderRow({ index, key, style }) {
+  renderRow({ index, key, style, parent }) {
     return (
-      <div key={key} style={style} className="row">
-        <div className="image">
-          <img src={this.list[index].image} alt="" />
-        </div>
-        <div className="content">
-          <div>{this.list[index].name}</div>
-          <div>{this.list[index].text}</div>
-        </div>
-      </div>
+      // <div key={key} style={style} className="row">
+      //   <div className="image">
+      //     <img src={this.list[index].image} alt="" />
+      //   </div>
+      //   <div className="content">
+      //     <div>{this.list[index].name}</div>
+      //     <div>{this.list[index].text}</div>
+      //   </div>
+      // </div>
+      <CellMeasurer 
+        key={key}
+        cache={this.cache}
+        parent={parent}
+        columnIndex={0}
+        rowIndex={index}>
+          <div style={style} className="row">
+            <div className="image">
+              <img src={this.list[index].image} alt="" />
+            </div>
+            <div className="content">
+              <div>{this.list[index].name}</div>
+              <div>{this.list[index].text}</div>
+            </div>
+          </div>
+      </CellMeasurer>
     );
   }
 
@@ -57,7 +77,8 @@ class App extends Component {
                 <List
                   width={width}
                   height={height}
-                  rowHeight={rowHeight}
+                  deferredMeasurementCache={this.cache}
+                  rowHeight={this.cache.rowHeight}
                   rowRenderer={this.renderRow}
                   rowCount={this.list.length}
                   overscanRowCount={3}
