@@ -19,10 +19,10 @@ class App extends Component {
         name: 'John Doe',
         image: 'http://via.placeholder.com/40',
         text: loremIpsum({
-          count: 1, 
+          count: 2, // 1 -> 2
           units: 'sentences',
-          sentenceLowerBound: 4,
-          sentenceUpperBound: 8 
+          sentenceLowerBound: 10, // 4 -> 10
+          sentenceUpperBound: 100, // 8 -> 100
         })
       }
     });
