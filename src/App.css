@@ -45,3 +45,7 @@
 .content {
   padding: 10px;
 }
+
+.leftSide {
+  overflow: hidden !important;
+}
